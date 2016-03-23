@@ -1,0 +1,31 @@
+<%= @team.errors.full_messages.join(", ") %>
+
+<%= form_for @team do |f| %>
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  <div>
+    <%= f.label :mmr %>
+    <%= f.text_field :mmr %>
+  </div>
+  <div>
+    <%= f.label :home_mmr %>
+    <%= f.text_field :home_mmr %>
+  </div>
+  <div>
+    <%= f.label :away_mmr %>
+    <%= f.text_field :away_mmr %>
+  </div>
+  <div>
+    <%= f.label :k_value %>
+    <%= f.text_field :k_value %>
+  </div>
+  <div>
+    <%= f.label :active %>
+    <%= f.check_box :active %>
+  </div>
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>
