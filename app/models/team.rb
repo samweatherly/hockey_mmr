@@ -6,15 +6,23 @@ class Team < ActiveRecord::Base
 
   after_initialize :set_defaults
 
+  # def update_games_played
+  #   self.total_games += 1
+  #   self.save
+  # end
+
+
+
   private
 # new teams have an initial MMR of 1500. Additionally they have a K of 40 for their
 # first 30 games. This will adjust to 20 after 30 games have been played.
   def set_defaults
-    self.mmr = 1500
-    self.k_value = 40
-    self.home_mmr = self.mmr
-    self.away_mmr = self.mmr
-    self.active = true
+    self.mmr ||= 1500
+    self.k_value ||= 40
+    self.home_mmr ||= self.mmr
+    self.away_mmr ||= self.mmr
+    self.active ||= true
+    self.total_games ||= 0
   end
 
 end

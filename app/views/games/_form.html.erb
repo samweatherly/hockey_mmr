@@ -1,0 +1,35 @@
+<%= @game.errors.full_messages.join(", ") %>
+
+<%= form_for @game do |f| %>
+  <div>
+    <%= f.label :home_team_id %>
+    <%= f.collection_select(:home_team_id, Team.order(:name), :id, :name) %>
+  </div>
+  <div>
+    <%= f.label :home_goals %>
+    <%= f.number_field :home_goals %>
+  </div>
+  <div>
+    <%= f.label :away_team_id %>
+    <%= f.collection_select(:away_team_id, Team.order(:name), :id, :name) %>
+  </div>
+  <div>
+    <%= f.label :away_goals %>
+    <%= f.number_field :away_goals %>
+  </div>
+  <div>
+    <%= f.label :extra_time %>
+    <%= f.text_field :extra_time %>
+  </div>
+  <div>
+    <%= f.label :date %>
+    <%= f.date_field :date %>
+  </div>
+  <div>
+    <%= f.label :playoff %>
+    <%= f.check_box :playoff %>
+  </div>
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>

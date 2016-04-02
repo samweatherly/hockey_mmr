@@ -29,7 +29,7 @@ before_action :find_team, only: [:show, :edit, :update, :destroy]
   def update
     # before_action :find_team
     @team.update team_params
-    redirect_to @team
+    redirect_to @team, success: "Team successfully updated"
   end
 
   def destroy
@@ -42,7 +42,7 @@ before_action :find_team, only: [:show, :edit, :update, :destroy]
 
   def team_params
     params.require(:team).permit( :name, :mmr, :k_value, :home_mmr, :away_mmr,
-                                  :logo, :active)
+                                  :logo, :active, :total_games)
   end
 
   def find_team

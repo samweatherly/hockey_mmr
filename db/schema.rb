@@ -11,21 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160322023631) do
+ActiveRecord::Schema.define(version: 20160401234552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "games", force: :cascade do |t|
-    t.string   "home_name"
     t.integer  "home_goals"
     t.float    "home_mmr"
-    t.integer  "home_k"
     t.integer  "home_team_id"
-    t.string   "away_name"
     t.integer  "away_goals"
     t.float    "away_mmr"
-    t.integer  "away_k"
     t.integer  "away_team_id"
     t.date     "date"
     t.string   "extra_time"
@@ -34,6 +30,8 @@ ActiveRecord::Schema.define(version: 20160322023631) do
     t.boolean  "playoff"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.integer  "season"
+    t.float    "result"
   end
 
   create_table "teams", force: :cascade do |t|
@@ -44,8 +42,9 @@ ActiveRecord::Schema.define(version: 20160322023631) do
     t.float    "away_mmr"
     t.string   "logo"
     t.boolean  "active"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "total_games"
   end
 
 end

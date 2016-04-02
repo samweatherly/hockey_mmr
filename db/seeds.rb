@@ -1,7 +1,150 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+require 'open-uri'
+
+#TEAMS
+teamsArr = ["Anaheim Ducks", "Arizona Coyotes", "Boston Bruins", "Buffalo Sabres",
+            "Calgary Flames", "Carolina Hurricanes", "Chicago Blackhawks",
+            "Colorado Avalanche", "Columbus Blue Jackets", "Dallas Stars",
+            "Detroit Red Wings", "Edmonton Oilers", "Florida Panthers",
+            "Los Angeles Kings", "Minnesota Wild", "Montreal Canadiens",
+            "Nashville Predators", "New Jersey Devils", "New York Islanders",
+            "New York Rangers", "Ottawa Senators", "Philadelphia Flyers",
+            "Pittsburgh Penguins", "San Jose Sharks", "St. Louis Blues",
+            "Tampa Bay Lightning", "Toronto Maple Leafs", "Vancouver Canucks",
+            "Washington Capitals", "Winnipeg Jets"]
+teamsArr.each do |team|
+  Team.create(name: team)
+end
+
+@teamHash = {"Anaheim Ducks"=>1, "Arizona Coyotes"=>2, "Boston Bruins"=>3,
+            "Buffalo Sabres"=>4, "Calgary Flames"=>5, "Carolina Hurricanes"=>6,
+            "Chicago Blackhawks"=>7, "Colorado Avalanche"=>8,
+            "Columbus Blue Jackets"=>9, "Dallas Stars"=>10, "Detroit Red Wings"=>11,
+            "Edmonton Oilers"=>12, "Florida Panthers"=>13, "Los Angeles Kings"=>14,
+            "Minnesota Wild"=>15, "Montreal Canadiens"=>16, "Nashville Predators"=>17,
+            "New Jersey Devils"=>18, "New York Islanders"=>19, "New York Rangers"=>20,
+            "Ottawa Senators"=>21, "Philadelphia Flyers"=>22, "Pittsburgh Penguins"=>23,
+            "San Jose Sharks"=>24, "St. Louis Blues"=>25, "Tampa Bay Lightning"=>26,
+            "Toronto Maple Leafs"=>27, "Vancouver Canucks"=>28, "Washington Capitals"=>29,
+            "Winnipeg Jets"=>30,
+            "Mighty Ducks of Anaheim"=>1, "Phoenix Coyotes"=>2, "Atlanta Thrashers"=>30}
+
+#GAMES
+# current date so we don't gather data for games that have not been played yet
+today = Time.new.to_s.split(' ')[0]
+
+def create_games(game, playoff, i)
+  # QUERY once, take into account team names change
+  query_home = Team.find(@teamHash[game[1]])
+  query_away = Team.find(@teamHash[game[2]])
+  # home_search_word = game[1].split(" ").last # takes last word of string to account for name changes
+  # away_search_word = game[2].split(" ").last # takes last word of string to account for name changes
+  # query_home = Team.where("name ILIKE ?", "%#{home_search_word}%")[0]
+  # query_away = Team.where("name ILIKE ?", "%#{away_search_word}%")[0]
+
+  #ORGANIZE & assign data
+  date = game[0]
+  home_team_id = query_home.id
+  away_team_id = query_away.id
+  home_goals = game[3].to_i
+  away_goals = game[4].to_i
+  # playoff = false
+  extra_time = nil
+  extra_time = game[5] if game[5]
+  home_mmr = query_home.mmr
+  away_mmr = query_away.mmr
+  season = i # seasons.each do
+  if home_goals == away_goals
+    result = 0.5
+  elsif home_goals > away_goals && extra_time == nil
+    result = 1
+  elsif away_goals > home_goals && extra_time == nil
+    result = 0
+  elsif home_goals > away_goals && extra_time[-2..-1] == "OT"
+    result = 0.75
+  elsif away_goals > home_goals && extra_time[-2..-1] == "OT"
+    result = 0.25
+  elsif home_goals > away_goals && extra_time == "SO"
+    result = 0.6
+  elsif away_goals > home_goals && extra_time == "SO"
+    result = 0.4
+  elsif home_goals > away_goals # if extra time wonky
+    result = 1
+  elsif away_goals > home_goals # if extra time wonky
+    result = 0
+  end
+  # calc probabililty, E(a) =  1 / ( 1 + 10^((R(b) - R(a))/400))
+  expected_home = 1 / (1 + 10**((away_mmr - home_mmr)/400.0))
+  expected_away = 1 - expected_home
+
+  # adjust ratings
+  new_home_mmr = home_mmr + query_home.k_value * (result - expected_home)
+  new_away_mmr = away_mmr + query_away.k_value * ((1 - result) - expected_away)
+
+  home_change = (new_home_mmr - home_mmr)
+  away_change = (new_away_mmr - away_mmr)
+
+  g = Game.create home_goals: home_goals, home_mmr: home_mmr, home_team_id: home_team_id,
+                  away_goals: away_goals, away_mmr: away_mmr, away_team_id: away_team_id,
+                  date: date, extra_time: extra_time, home_rating_change: home_change,
+                  away_rating_change: away_change, playoff: playoff,
+                  season: season, result: result
+  g.update_game_count
+  g.update_mmr(home_change, away_change)
+end
+
+
+# Fetch and parse HTML document
+# no 2005 due to lockout
+seasons = %w(2001 2002 2003 2004 2006 2007 2008 2009 2010 2011 2012 2013 2014 2015 2016)
+# seasons = [2016]
+seasons.each do |i|
+  doc = Nokogiri::HTML(open("http://www.hockey-reference.com/leagues/NHL_#{i}_games.html"))
+
+  # REGULAR SEASON, 1230 games present era, non-lockout
+  gamesXML = []
+  doc.css('#div_games tbody tr').each do |row|
+    gamesXML.push(row.search('a').xpath('text()') + row.search('td').xpath('text()'))
+  end
+  # puts each game into a nested array inside gamesArr - data as string
+  gamesArr = []
+  gamesArr = gamesXML.map do |game|
+    game.map do |x|
+      x.to_s
+    end
+  end
+  # assign data to variables and create game row in table
+  gamesArr.each do |game|
+    # break loop if nokgiri starts pulling current/future game data
+    if game[0] >= today
+      break
+    end
+    playoff = false
+    create_games(game, playoff, i)
+  end
+
+
+
+# PLAYOFFS
+  gamesXML = []
+  doc.css('#div_games_playoffs tbody tr').each do |row|
+    gamesXML.push(row.search('a').xpath('text()') + row.search('td').xpath('text()'))
+  end
+
+  # puts each game into a nested array inside gamesArr - data as string
+  gamesArr = []
+  gamesArr = gamesXML.map do |game|
+    game.map do |x|
+      x.to_s
+    end
+  end
+  # assign data to variables and create game row in table
+  gamesArr.each do |game|
+    # break loop if nokgiri starts pulling current/future game data
+    if game[0] >= today
+      break
+    end
+    playoff = true
+    create_games(game, playoff, i)
+  end
+
+end #seasons each
