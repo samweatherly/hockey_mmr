@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :teams
   resources :futures
 
+  root "futures#index"
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'

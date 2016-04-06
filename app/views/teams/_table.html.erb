@@ -1,0 +1,16 @@
+<table>
+  <thead>
+    <tr>
+      <th>Team</th>
+      <th>MMR</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @filter.each do |t| %>
+      <tr>
+        <td><%= t.name %></td>
+        <td><%= t.mmr.round(0) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

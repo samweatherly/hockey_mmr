@@ -24,6 +24,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'bootstrap-sass'
+gem 'rack-cors', :require => 'rack/cors'
 gem 'nokogiri'
 gem 'delayed_job_active_record'
 gem 'delayed_job_recurring'

@@ -8,6 +8,11 @@ class FuturesController < ApplicationController
     end
   end
 
+  def index
+    @futures = Future.all
+    @teams = Team.order("mmr DESC")
+  end
+
   def destroy
     # before_action :find_game
     @game.destroy
