@@ -1,6 +1,7 @@
 <table>
   <thead>
     <tr>
+      <th></th>
       <th>Team</th>
       <th>MMR</th>
     </tr>
@@ -8,6 +9,7 @@
   <tbody>
     <% @filter.each do |t| %>
       <tr>
+        <td><%= image_tag(t.logo.url(:teeny)) %></td>
         <td><%= t.name %></td>
         <td><%= t.mmr.round(0) %></td>
       </tr>

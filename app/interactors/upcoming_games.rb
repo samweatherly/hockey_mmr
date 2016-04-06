@@ -73,7 +73,6 @@ class UpcomingGames
     games_today = 0
     later_games = 0
     gamesArr.each do |game|
-
       if (game[2][0..3] == current_time.year.to_s || game[2][0..3] == (current_time.year + 1).to_s)
         if game[2] == today && games_today <= 15
           games_today += 1

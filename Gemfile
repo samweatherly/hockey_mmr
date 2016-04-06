@@ -30,6 +30,8 @@ gem 'delayed_job_active_record'
 gem 'delayed_job_recurring'
 gem 'capybara'
 gem 'poltergeist'
+gem 'carrierwave'
+gem 'mini_magick'
 
 
 # Use ActiveModel has_secure_password

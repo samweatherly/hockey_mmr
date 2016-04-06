@@ -6,7 +6,10 @@ class Team < ActiveRecord::Base
   #future
   has_many :home_futures, :class_name => 'Future', foreign_key: 'home_team_id'
   has_many :away_futures, :class_name => 'Future', foreign_key: 'away_team_id'
-  
+
+  mount_uploader :logo, LogoUploader
+
+
   validates :name, presence: true
 
   after_initialize :set_defaults

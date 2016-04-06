@@ -2,3 +2,22 @@
 MMR: <%= @team.mmr %>
 Home MMR: <%= @team.home_mmr %>
 Away MMR: <%= @team.away_mmr %>
+
+<% if @team.logo %>
+  Medium
+  <div>
+    <%= image_tag(@team.logo.url(:medium)) %>
+  </div>
+  Thumb
+  <div>
+    <%= image_tag(@team.logo.url(:thumb)) %>
+  </div>
+  Tiny
+  <div>
+    <%= image_tag(@team.logo.url(:tiny)) %>
+  </div>
+  Teeny
+  <div>
+    <%= image_tag(@team.logo.url(:teeny)) %>
+  </div>
+<% end %>
