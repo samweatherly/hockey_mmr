@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   resources :games
   resources :teams
+  resources :futures
 
 
   # You can have the root of your site routed with "root"

@@ -25,6 +25,12 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'bootstrap-sass'
 gem 'nokogiri'
+gem 'delayed_job_active_record'
+gem 'delayed_job_recurring'
+gem 'capybara'
+gem 'poltergeist'
+
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

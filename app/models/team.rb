@@ -1,7 +1,12 @@
 class Team < ActiveRecord::Base
+  #game
   has_many :home_games, :class_name => 'Game', foreign_key: 'home_team_id'
   has_many :away_games, :class_name => 'Game', foreign_key: 'away_team_id'
 
+  #future
+  has_many :home_futures, :class_name => 'Future', foreign_key: 'home_team_id'
+  has_many :away_futures, :class_name => 'Future', foreign_key: 'away_team_id'
+  
   validates :name, presence: true
 
   after_initialize :set_defaults
