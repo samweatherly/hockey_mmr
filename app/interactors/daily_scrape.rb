@@ -10,7 +10,7 @@ class DailyScrape
     Capybara::Poltergeist::Driver.new(app, js_errors: false)
   end
   run_every 1.day
-  run_at '12:40am'
+  run_at '11:55pm'
   timezone 'US/Pacific'
   queue 'slow-jobs'
 
@@ -83,11 +83,8 @@ class DailyScrape
 
 
   def perform
-    puts "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-    puts ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-
-
-    today = (Time.new - 1.day).to_s.split(' ')[0]
+    # today = (Time.new - 1.day).to_s.split(' ')[0]
+    today = Time.new.to_s.split(' ')[0]
 
     visit "https://www.nhl.com/scores"
     puts "Today: #{today}"

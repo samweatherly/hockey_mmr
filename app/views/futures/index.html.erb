@@ -2,6 +2,7 @@
   <hr>
   <h1 class='main-title montserrat'>HOCKEY MMR</h1>
   <hr>
+  <h2 class='montserrat' style='text-align:center; margin-top:50px'>Upcoming Games</h2>
   <section class="cd-horizontal-timeline">
   	<div class="timeline">
   		<div class="events-wrapper">
@@ -52,15 +53,18 @@
   		</ol>
   	</div> <%# <!-- .events-content --> %>
   </section>
+  <hr>
 </div>
 
+
 <div id='east-west' class='container text-center'>
-  <div id='teams-table-east' style="display:inline-block">
+  <h2 class='montserrat'>Team Ratings</h2>
+  <div class='teams-table'>
     <h3 class="ubuntu">Eastern</h3>
     <% @filter = @teams.where(conference: "Eastern") %>
     <%= render "/teams/table" %>
   </div>
-  <div id='teams-table-west' style="display:inline-block; margin-left: 100px">
+  <div class='teams-table'>
     <h3 class="ubuntu">Western</h3>
     <% @filter = @teams.where(conference: "Western") %>
     <%= render "/teams/table" %>

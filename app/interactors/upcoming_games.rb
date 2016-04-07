@@ -3,7 +3,7 @@ require 'open-uri'
 class UpcomingGames
   include Delayed::RecurringJob
   run_every 1.day
-  run_at '11:09am'
+  run_at '2:00am'
   timezone 'US/Pacific'
   queue 'slow-jobs'
 
@@ -27,7 +27,6 @@ class UpcomingGames
         query_away = Team.find(teamHash[away_team])
       rescue
         puts 'rescue'
-        # byebug
       end
       puts 'query'
 

@@ -410,6 +410,7 @@ Main Components
 .main-title {
   text-align: center;
   font-family: 'Ubuntu', sans-serif;
+  font-size: 300%;
 }
 
 .ubuntu {
@@ -417,4 +418,20 @@ Main Components
 }
 .montserrat {
   font-family: 'Montserrat', sans-serif;
+}
+
+.teams-table {
+  display:inline-block;
+  padding:50px;
+}
+.cd-horizontal-timeline {
+  margin-top: 0;
+}
+.teams-table {
+  padding-top: 0;
+}
+
+.east-west {
+  font-size: 110%;
+
 }
