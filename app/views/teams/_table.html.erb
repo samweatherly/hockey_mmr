@@ -1,14 +1,14 @@
 <table class='table table-striped'>
   <thead>
-    <tr>
+    <tr class="ubuntu">
       <th></th>
       <th>Team</th>
-      <th>MMR</th>
+      <th>Rating</th>
     </tr>
   </thead>
   <tbody>
     <% @filter.each do |t| %>
-      <tr>
+      <tr class="ubuntu">
         <td><%= image_tag(t.logo.url(:teeny)) %></td>
         <td><%= t.name %></td>
         <td><%= t.mmr.round(0) %></td>

@@ -10,7 +10,7 @@ class DailyScrape
     Capybara::Poltergeist::Driver.new(app, js_errors: false)
   end
   run_every 1.day
-  run_at '11:55pm'
+  run_at '12:40am'
   timezone 'US/Pacific'
   queue 'slow-jobs'
 
@@ -37,7 +37,6 @@ class DailyScrape
     query_home = Team.find(teamHash[home_team])
     query_away = Team.find(teamHash[away_team])
     puts 'query'
-    # byebug
     #ORGANIZE & assign data
     home_mmr = query_home.mmr
     away_mmr = query_away.mmr
@@ -88,17 +87,20 @@ class DailyScrape
     puts ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 
 
-    today = Time.new.to_s.split(' ')[0]
+    today = (Time.new - 1.day).to_s.split(' ')[0]
 
     visit "https://www.nhl.com/scores"
-    # puts "Today: #{today}"
+    puts "Today: #{today}"
     all("ul.nhl-scores__list.nhl-scores__list--games li").each do |row|
-        if row.text.split(",")[0][-3..-1] == 'day'
+      puts row.text
+        if row.text.split(",")[0].strip[-3..-1] == 'day'
           @date = Date.parse row.text
+          puts "date: #{@date}"
         end
       if @date.to_s == today && row.text.match("FINAL")
+        puts "@date == today"
         if row.text.match("@")
-          puts row.text
+          puts "@"
           away_team = row.text.split("@")[0]
           home_team = row.text.split("@")[1].split("Teams")[0]
           puts 'team'
