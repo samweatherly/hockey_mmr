@@ -1,15 +1,58 @@
 <div class='container'>
-  <h1>Hockey MMR</h1>
+  <h1 style='text-align:center'>Hockey MMR</h1>
+  <section class="cd-horizontal-timeline">
+  	<div class="timeline">
+  		<div class="events-wrapper">
+  			<div class="events">
+  				<ol>
+            <% count = 1 %>
+            <% today = Date.today %>
+            <% (today..(today + 17)).each do |future| %>
+              <% if count == 1 %>
+                <li><a href="#0" data-date="<%= date_format(future) %>" class="selected"><%= date_display(future) %></a></li>
+              <% else %>
+                <li><a href="#0" data-date="<%= date_format(future) %>"><%= date_display(future) %></a></li>
+              <% end %>
+              <% count += 1 %>
+            <% end %>
+  				</ol>
 
-  <% @futures.each do |f| %>
-    <div>
-      <%= f.away_team_name %> (<%= ((1 - f.expected_result) * 100).round(1) %>%) @ <%= f.home_team_name %> (<%= (f.expected_result * 100).round(1) %>%)  |  <%= f.date %>
-      <p></p>
-    </div>
-  <% end %>
+  				<span class="filling-line" aria-hidden="true"></span>
+  			</div> <%# <!-- .events --> %>
+  		</div> <%# <!-- .events-wrapper --> %>
+
+  		<ul class="cd-timeline-navigation">
+  			<li><a href="#0" class="prev inactive">Prev</a></li>
+  			<li><a href="#0" class="next">Next</a></li>
+  		</ul> <%# <!-- .cd-timeline-navigation --> %>
+  	</div> <%# <!-- .timeline --> %>
+
+  	<div class="events-content">
+  		<ol>
+        <% counter2 = 1 %>
+        <% today = Date.today %>
+        <% (today..(today + 2)).each do |day| %>
+          <% if counter2 == 1 %>
+            <li class="selected" data-date="<%= date_format(day) %>">
+          <% else %>
+            <li data-date="<%= date_format(day) %>">
+          <% end %>
+          <% @futures.where(date: day).each do |future| %>
+            <div class="col-lg-4 col-sm-12" style="margin-bottom:50px">
+              <%= image_tag(future.away_logo) %><%= future.away_team_name %> (<%= ((1 - future.expected_result) * 100).round(1) %>%)
+              <p style='text-align:center'>@</p>
+              <%= image_tag(future.home_logo) %><%= future.home_team_name %> (<%= (future.expected_result * 100).round(1) %>%)
+            </div>
+          <% end %>
+          </li>
+          <% counter2 += 1 %>
+        <% end %>
+  		</ol>
+  	</div> <%# <!-- .events-content --> %>
+  </section>
 </div>
 
-<div id='east-west' class='container'>
+<div id='east-west' class='container text-center'>
   <div id='teams-table-east' style="display:inline-block">
     <h3>Eastern</h3>
     <% @filter = @teams.where(conference: "Eastern") %>
