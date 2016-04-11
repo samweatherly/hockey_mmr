@@ -4,8 +4,8 @@ Rails.application.routes.draw do
 
 
 
-  resources :games
-  resources :teams
+  # resources :games
+  # resources :teams
   resources :futures
 
   root "futures#index"

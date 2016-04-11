@@ -12,7 +12,9 @@ teamsArr = ["Anaheim Ducks", "Arizona Coyotes", "Boston Bruins", "Buffalo Sabres
             "Tampa Bay Lightning", "Toronto Maple Leafs", "Vancouver Canucks",
             "Washington Capitals", "Winnipeg Jets"]
 teamsArr.each do |team|
-  Team.create(name: team)
+  t = Team.create(name: team)
+  t.logo = Rails.root.join("app/assets/images/nhl_logos/#{team.downcase.gsub(".", "").split(" ").join("-")}.png").open
+  t.save
 end
 
 @teamHash = {"Anaheim Ducks"=>1, "Arizona Coyotes"=>2, "Boston Bruins"=>3,

@@ -1,6 +1,6 @@
 <h1>All Teams</h1>
 <% @teams.each do |team| %>
   <div>
-    <%= link_to team.name, team, class: "btn btn-primary" %>
+    <%= image_tag(team.logo.url(:tiny)) %><%= link_to team.name, team, class: "btn btn-primary" %>
   </div>
 <% end %>

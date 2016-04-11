@@ -29,15 +29,10 @@ class DailyScrape
                 "Winnipeg Jets"=>30,
                 "Mighty Ducks of Anaheim"=>1, "Phoenix Coyotes"=>2, "Atlanta Thrashers"=>30,
                 "Montréal Canadiens"=>16}
-    # QUERY once, take into account team names change
-    puts 'create_game'
-    puts "home: #{home_team}, away: #{away_team}"
-    p home_team
-    p away_team
+
     query_home = Team.find(teamHash[home_team])
     query_away = Team.find(teamHash[away_team])
-    puts 'query'
-    #ORGANIZE & assign data
+
     home_mmr = query_home.mmr
     away_mmr = query_away.mmr
     season = i # seasons.each do
