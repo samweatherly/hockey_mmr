@@ -10,7 +10,7 @@
   				<ol>
             <% count = 1 %>
             <% today = Date.today %>
-            <% (today..(today + 17)).each do |future| %>
+            <% (today..(today + 14)).each do |future| %>
               <% if count == 1 %>
                 <li><a href="#0" data-date="<%= date_format(future) %>" class="selected ubuntu"><%= date_display(future) %></a></li>
               <% else %>
@@ -34,7 +34,7 @@
   		<ol>
         <% counter2 = 1 %>
         <% today = Date.today %>
-        <% (today..(today + 3)).each do |day| %>
+        <% (today..(today + 14)).each do |day| %>
           <% if counter2 == 1 %>
             <li class="selected" data-date="<%= date_format(day) %>">
           <% else %>

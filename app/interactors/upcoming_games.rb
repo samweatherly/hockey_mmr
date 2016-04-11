@@ -3,7 +3,7 @@ require 'open-uri'
 class UpcomingGames
   include Delayed::RecurringJob
   run_every 1.day
-  run_at '2:00am'
+  run_at '1:03pm'
   timezone 'US/Pacific'
   queue 'slow-jobs'
 
@@ -86,8 +86,43 @@ class UpcomingGames
           p game
           # create_future_game(valid_date, home_team, away_team)
           create_future_game(game[2], game[1], game[0])
-        end
+        end #if
+      end #if
+    end #gamesArr.each
+
+    #PLAYOFFS
+    gamesXML = []
+    doc.css('#div_games_playoffs tbody tr').each do |row|
+      gamesXML.push(row.search('a').xpath('text()') + row.search('td').xpath('text()'))
+    end
+    # puts each game into a nested array inside gamesArr - data as string
+    gamesArr = []
+    gamesArr = gamesXML.map do |game|
+      game.map do |x|
+        x.to_s
       end
     end
+
+    # assign data to variables and create game row in table
+    # games_today = 0
+    # later_games = 0
+    gamesArr.each do |game|
+      if (game[2][0..3] == current_time.year.to_s || game[2][0..3] == (current_time.year + 1).to_s)
+        if game[2] == today #&& games_today <= 15
+          # games_today += 1
+          puts 'if today'
+          puts game
+          p game
+          # create_future_game(valid_date, home_team, away_team)
+          create_future_game(game[2], game[1], game[0])
+        elsif game[2] >= today # && games_today <= 5 && later_games <= 5
+          # later_games += 1
+          puts 'if tomorrow+'
+          p game
+          # create_future_game(valid_date, home_team, away_team)
+          create_future_game(game[2], game[1], game[0])
+        end #if
+      end #if
+    end #gamesArr.each
   end
 end
