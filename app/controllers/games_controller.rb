@@ -46,7 +46,7 @@ class GamesController < ApplicationController
     params.require(:game).permit( :home_team_id, :away_team_id, :home_goals,
                                   :away_goals, :date, :extra_time, :playoff,
                                   :season, :result, :home_rating_change,
-                                  :away_rating_change)
+                                  :away_rating_change, :expected)
   end
 
   def find_game

@@ -48,8 +48,8 @@ today = Time.new.to_s.split(' ')[0]
 
 def create_games(game, playoff, i)
   # QUERY once, take into account team names change
-  query_home = Team.find(@teamHash[game[1]])
-  query_away = Team.find(@teamHash[game[2]])
+  query_home = Team.find(@teamHash[game[2]])
+  query_away = Team.find(@teamHash[game[1]])
   # home_search_word = game[1].split(" ").last # takes last word of string to account for name changes
   # away_search_word = game[2].split(" ").last # takes last word of string to account for name changes
   # query_home = Team.where("name ILIKE ?", "%#{home_search_word}%")[0]
@@ -59,8 +59,8 @@ def create_games(game, playoff, i)
   date = game[0]
   home_team_id = query_home.id
   away_team_id = query_away.id
-  home_goals = game[3].to_i
-  away_goals = game[4].to_i
+  home_goals = game[4].to_i
+  away_goals = game[3].to_i
   # playoff = false
   extra_time = nil
   extra_time = game[5] if game[5]
@@ -101,7 +101,7 @@ def create_games(game, playoff, i)
                   away_goals: away_goals, away_mmr: away_mmr, away_team_id: away_team_id,
                   date: date, extra_time: extra_time, home_rating_change: home_change,
                   away_rating_change: away_change, playoff: playoff,
-                  season: season, result: result
+                  season: season, result: result, expected: expected_home
   g.update_game_count
   g.update_mmr(home_change, away_change)
 end
