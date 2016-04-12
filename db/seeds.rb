@@ -78,9 +78,9 @@ def create_games(game, playoff, i)
   elsif away_goals > home_goals && extra_time[-2..-1] == "OT"
     result = 0.25
   elsif home_goals > away_goals && extra_time == "SO"
-    result = 0.6
+    result = 0.55
   elsif away_goals > home_goals && extra_time == "SO"
-    result = 0.4
+    result = 0.45
   elsif home_goals > away_goals # if extra time wonky
     result = 1
   elsif away_goals > home_goals # if extra time wonky
