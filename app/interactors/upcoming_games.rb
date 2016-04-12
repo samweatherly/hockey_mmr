@@ -3,7 +3,7 @@ require 'open-uri'
 class UpcomingGames
   include Delayed::RecurringJob
   run_every 1.day
-  run_at '1:03pm'
+  run_at '2:00am'
   timezone 'US/Pacific'
   queue 'slow-jobs'
 
