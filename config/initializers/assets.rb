@@ -2,8 +2,8 @@
 
 # Version of your assets, change this if you want to expire all your assets.
 Rails.application.config.assets.version = '1.0'
-# DailyScrape.schedule!
-# UpcomingGames.schedule!
+DailyScrape.schedule!
+UpcomingGames.schedule!
 
 
 # Add additional assets to the asset load path
