@@ -1,2 +1,2 @@
-web: bundle exec rails server -p5000
+web: bundle exec puma -C config/puma.rb
 worker: rake jobs:work

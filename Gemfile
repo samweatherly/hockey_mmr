@@ -33,7 +33,7 @@ gem 'poltergeist'
 gem 'carrierwave'
 gem 'mini_magick'
 gem 'rails_12factor', group: :production
-
+gem 'puma'
 
 
 # Use ActiveModel has_secure_password
