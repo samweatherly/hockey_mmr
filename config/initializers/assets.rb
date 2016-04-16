@@ -4,6 +4,7 @@
 Rails.application.config.assets.version = '1.0'
 DailyScrape.schedule!
 UpcomingGames.schedule!
+#uncomment/comment
 
 
 # Add additional assets to the asset load path
