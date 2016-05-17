@@ -70,7 +70,7 @@ class DailyScrape
                     away_goals: away_goals, away_mmr: away_mmr, away_team_id: query_away.id,
                     date: date, extra_time: extra_time, home_rating_change: home_change,
                     away_rating_change: away_change, playoff: playoff,
-                    season: season, result: result
+                    season: season, result: result, expected: expected_home
     g.update_game_count
     g.update_mmr(home_change, away_change)
   end
