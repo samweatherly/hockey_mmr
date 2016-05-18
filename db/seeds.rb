@@ -1,6 +1,6 @@
 require 'open-uri'
 
-#TEAMS
+# Current Teams (for team creation)
 teamsArr = ["Anaheim Ducks", "Arizona Coyotes", "Boston Bruins", "Buffalo Sabres",
             "Calgary Flames", "Carolina Hurricanes", "Chicago Blackhawks",
             "Colorado Avalanche", "Columbus Blue Jackets", "Dallas Stars",
@@ -11,6 +11,7 @@ teamsArr = ["Anaheim Ducks", "Arizona Coyotes", "Boston Bruins", "Buffalo Sabres
             "Pittsburgh Penguins", "San Jose Sharks", "St. Louis Blues",
             "Tampa Bay Lightning", "Toronto Maple Leafs", "Vancouver Canucks",
             "Washington Capitals", "Winnipeg Jets"]
+# May add divisions later ...
 conferences = {"Anaheim Ducks"=>"Western", "Arizona Coyotes"=>"Western", "Boston Bruins"=>"Eastern",
             "Buffalo Sabres"=>"Eastern", "Calgary Flames"=>"Western", "Carolina Hurricanes"=>"Eastern",
             "Chicago Blackhawks"=>"Western", "Colorado Avalanche"=>"Western",
@@ -22,6 +23,7 @@ conferences = {"Anaheim Ducks"=>"Western", "Arizona Coyotes"=>"Western", "Boston
             "San Jose Sharks"=>"Western", "St. Louis Blues"=>"Western", "Tampa Bay Lightning"=>"Eastern",
             "Toronto Maple Leafs"=>"Eastern", "Vancouver Canucks"=>"Western", "Washington Capitals"=>"Eastern",
             "Winnipeg Jets"=>"Western"}
+# create teams (name, conference, logo) - base rating of 1500
 teamsArr.each do |team|
   t = Team.create(name: team)
   t.logo = Rails.root.join("app/assets/images/nhl_logos/#{team.downcase.gsub(".", "").split(" ").join("-")}.png").open
@@ -29,6 +31,7 @@ teamsArr.each do |team|
   t.save
 end
 
+# This is required as teams change names or relocate. This maps past names to the current name/location of the franchise
 @teamHash = {"Anaheim Ducks"=>1, "Arizona Coyotes"=>2, "Boston Bruins"=>3,
             "Buffalo Sabres"=>4, "Calgary Flames"=>5, "Carolina Hurricanes"=>6,
             "Chicago Blackhawks"=>7, "Colorado Avalanche"=>8,
@@ -47,13 +50,9 @@ end
 today = Time.new.to_s.split(' ')[0]
 
 def create_games(game, playoff, i)
-  # QUERY once, take into account team names change
+  # QUERY once, find index based off name
   query_home = Team.find(@teamHash[game[2]])
   query_away = Team.find(@teamHash[game[1]])
-  # home_search_word = game[1].split(" ").last # takes last word of string to account for name changes
-  # away_search_word = game[2].split(" ").last # takes last word of string to account for name changes
-  # query_home = Team.where("name ILIKE ?", "%#{home_search_word}%")[0]
-  # query_away = Team.where("name ILIKE ?", "%#{away_search_word}%")[0]
 
   #ORGANIZE & assign data
   date = game[0]
@@ -136,8 +135,6 @@ seasons.each do |i|
     create_games(game, playoff, i)
   end
 
-
-
 # PLAYOFFS
   gamesXML = []
   doc.css('#div_games_playoffs tbody tr').each do |row|
@@ -162,14 +159,6 @@ seasons.each do |i|
   end
 
 end #seasons each
-
-
-
-
-
-
-
-
 
 def create_future_game(date, home_team, away_team)
   # puts 'create future game'
@@ -207,9 +196,11 @@ def create_future_game(date, home_team, away_team)
                   home_mmr: home_mmr, away_mmr: away_mmr)
 end
 
+# This method adds 'upcoming games' the slider. This allows viewers to see upcoming games and predictions.
+# A scraper performs this function every day (in case of schedule changes).
 def upcoming_games_seed
   # puts 'perform'
-  Future.destroy_all
+  Future.destroy_all # Cannot just add new games on in case the schedule was changed (not necessary for seed, simply copied from scrape)
   current_time = Time.new
   today = current_time.to_s.split(' ')[0]
 

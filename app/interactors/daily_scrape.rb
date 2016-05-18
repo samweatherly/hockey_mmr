@@ -50,7 +50,7 @@ class DailyScrape
       result = 0.6
     elsif away_goals > home_goals && extra_time == "SO"
       result = 0.4
-    elsif home_goals > away_goals # if extra time wonky
+    elsif home_goals > away_goals # if extra time wonky (scraper sometimes pulls text from other column)
       result = 1
     elsif away_goals > home_goals # if extra time wonky
       result = 0
