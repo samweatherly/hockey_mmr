@@ -1,5 +1,4 @@
 $(document).ready(function(){
-  console.log("loaded yo");
 	var timelines = $('.cd-horizontal-timeline'),
 		eventsMinDistance = 60;
 
