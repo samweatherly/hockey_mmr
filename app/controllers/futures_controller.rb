@@ -1,4 +1,5 @@
 class FuturesController < ApplicationController
+
   def create
     future = Future.new future_params
     if future.save

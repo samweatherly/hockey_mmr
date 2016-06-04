@@ -107,12 +107,14 @@ class DailyScrape
           end
           puts 'extra_time'
 
-          playoff = false
+
           if Time.new.month <= 6
             season = Time.new.year
           else
             season = Time.new.year + 1
           end
+
+          playoff = Game.where(season: season).count < 1230 ? false : true
 
           create_game(playoff, season, extra_time, home_team.strip, away_team.strip, home_goals,
                       away_goals, today)
