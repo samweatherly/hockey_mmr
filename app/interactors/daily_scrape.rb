@@ -75,38 +75,27 @@ class DailyScrape
     g.update_mmr(home_change, away_change)
   end
 
-
-
   def perform
     # today = (Time.new - 1.day).to_s.split(' ')[0]
     today = Time.new.to_s.split(' ')[0]
 
     visit "https://www.nhl.com/scores"
-    puts "Today: #{today}"
     all("ul.nhl-scores__list.nhl-scores__list--games li").each do |row|
-      puts row.text
-        if row.text.split(",")[0].strip[-3..-1] == 'day'
-          @date = Date.parse row.text
-          puts "date: #{@date}"
-        end
+      if row.text.split(",")[0].strip[-3..-1] == 'day'
+        @date = Date.parse row.text
+      end
       if @date.to_s == today && row.text.match("FINAL")
-        puts "@date == today"
         if row.text.match("@")
-          puts "@"
           away_team = row.text.split("@")[0]
           home_team = row.text.split("@")[1].split("Teams")[0]
-          puts 'team'
           away_goals = row.text.split("#{home_team}")[1].split(" ")[-1]
           home_goals = row.text.split("Status")[0].split(" ")[-1]
 
-          puts "team & goals"
           if row.text.split("WATCH")[0].split(" ")[-1] != "FINAL"
               extra_time = row.text.split("WATCH")[0].split(" ")[-1][-2..-1]
           else
             extra_time = nil
           end
-          puts 'extra_time'
-
 
           if Time.new.month <= 6
             season = Time.new.year
@@ -118,9 +107,6 @@ class DailyScrape
 
           create_game(playoff, season, extra_time, home_team.strip, away_team.strip, home_goals,
                       away_goals, today)
-          puts "#{away_team}: #{away_goals} | #{home_team}: #{home_goals} "
-          puts extra_time
-          puts "--------------------------------------------------------"
         end #if
       end #if
     end #each row

@@ -28,15 +28,12 @@ class UpcomingGames
       rescue
         puts 'rescue'
       end
-      puts 'query'
-
 
       home_team_id = query_home.id
       away_team_id = query_away.id
       home_mmr = query_home.mmr
       away_mmr = query_away.mmr
       expected_result = 1 / (1 + 10**((away_mmr - home_mmr)/400.0))
-      puts 'assign variables'
 
       Future.create(home_team_id: home_team_id, away_team_id: away_team_id,
                     date: date, expected_result: expected_result,
@@ -44,7 +41,6 @@ class UpcomingGames
   end
 
   def perform
-    puts 'perform'
     Future.destroy_all
     current_time = Time.new
     today = current_time.to_s.split(' ')[0]
@@ -54,8 +50,8 @@ class UpcomingGames
     else
       season = current_time.year + 1
     end
+
     doc = Nokogiri::HTML(open("http://www.hockey-reference.com/leagues/NHL_#{season}_games.html"))
-    puts 'nokogiri'
     gamesXML = []
     doc.css('#div_games tbody tr').each do |row|
       gamesXML.push(row.search('a').xpath('text()') + row.search('td').xpath('text()'))
@@ -69,21 +65,12 @@ class UpcomingGames
     end
 
     # assign data to variables and create game row in table
-    # games_today = 0
-    # later_games = 0
     gamesArr.each do |game|
       if (game[2][0..3] == current_time.year.to_s || game[2][0..3] == (current_time.year + 1).to_s)
         if game[2] == today #&& games_today <= 15
-          # games_today += 1
-          puts 'if today'
-          puts game
-          p game
           # create_future_game(valid_date, home_team, away_team)
           create_future_game(game[2], game[1], game[0])
         elsif game[2] >= today # && games_today <= 5 && later_games <= 5
-          # later_games += 1
-          puts 'if tomorrow+'
-          p game
           # create_future_game(valid_date, home_team, away_team)
           create_future_game(game[2], game[1], game[0])
         end #if
@@ -104,21 +91,12 @@ class UpcomingGames
     end
 
     # assign data to variables and create game row in table
-    # games_today = 0
-    # later_games = 0
     gamesArr.each do |game|
       if (game[2][0..3] == current_time.year.to_s || game[2][0..3] == (current_time.year + 1).to_s)
         if game[2] == today #&& games_today <= 15
-          # games_today += 1
-          puts 'if today'
-          puts game
-          p game
           # create_future_game(valid_date, home_team, away_team)
           create_future_game(game[2], game[1], game[0])
         elsif game[2] >= today # && games_today <= 5 && later_games <= 5
-          # later_games += 1
-          puts 'if tomorrow+'
-          p game
           # create_future_game(valid_date, home_team, away_team)
           create_future_game(game[2], game[1], game[0])
         end #if
