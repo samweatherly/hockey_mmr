@@ -108,8 +108,7 @@ end
 
 # Fetch and parse HTML document
 # no 2005 due to lockout
-seasons = %w(2001 2002 2003 2004 2006 2007 2008 2009 2010 2011 2012 2013 2014 2015 2016)
-# seasons = [2016]
+seasons = %w(2014 2015 2016)
 seasons.each do |i|
   doc = Nokogiri::HTML(open("http://www.hockey-reference.com/leagues/NHL_#{i}_games.html"))
 
