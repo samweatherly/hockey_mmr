@@ -66,13 +66,13 @@ class UpcomingGames
 
     # assign data to variables and create game row in table
     gamesArr.each do |game|
-      if (game[2][0..3] == current_time.year.to_s || game[2][0..3] == (current_time.year + 1).to_s)
-        if game[2] == today #&& games_today <= 15
+      if (game[0][0..3] == current_time.year.to_s || game[0][0..3] == (current_time.year + 1).to_s)
+        if game[0] == today #&& games_today <= 15
           # create_future_game(valid_date, home_team, away_team)
-          create_future_game(game[2], game[1], game[0])
-        elsif game[2] >= today # && games_today <= 5 && later_games <= 5
+          create_future_game(game[0], game[2], game[1])
+        elsif game[0] >= today # && games_today <= 5 && later_games <= 5
           # create_future_game(valid_date, home_team, away_team)
-          create_future_game(game[2], game[1], game[0])
+          create_future_game(game[0], game[2], game[1])
         end #if
       end #if
     end #gamesArr.each
@@ -92,13 +92,13 @@ class UpcomingGames
 
     # assign data to variables and create game row in table
     gamesArr.each do |game|
-      if (game[2][0..3] == current_time.year.to_s || game[2][0..3] == (current_time.year + 1).to_s)
-        if game[2] == today #&& games_today <= 15
+      if (game[0][0..3] == current_time.year.to_s || game[0][0..3] == (current_time.year + 1).to_s)
+        if game[0] == today #&& games_today <= 15
           # create_future_game(valid_date, home_team, away_team)
-          create_future_game(game[2], game[1], game[0])
-        elsif game[2] >= today # && games_today <= 5 && later_games <= 5
+          create_future_game(game[0], game[2], game[1])
+        elsif game[0] >= today # && games_today <= 5 && later_games <= 5
           # create_future_game(valid_date, home_team, away_team)
-          create_future_game(game[2], game[1], game[0])
+          create_future_game(game[0], game[2], game[1])
         end #if
       end #if
     end #gamesArr.each

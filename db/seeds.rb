@@ -108,7 +108,7 @@ end
 
 # Fetch and parse HTML document
 # no 2005 due to lockout
-seasons = %w(2014 2015 2016)
+seasons = %w(2015 2016 2017)
 seasons.each do |i|
   doc = Nokogiri::HTML(open("http://www.hockey-reference.com/leagues/NHL_#{i}_games.html"))
 
@@ -198,7 +198,7 @@ end
 # This method adds 'upcoming games' the slider. This allows viewers to see upcoming games and predictions.
 # A scraper performs this function every day (in case of schedule changes).
 def upcoming_games_seed
-  # puts 'perform'
+  puts 'perform'
   Future.destroy_all # Cannot just add new games on in case the schedule was changed (not necessary for seed, simply copied from scrape)
   current_time = Time.new
   today = current_time.to_s.split(' ')[0]
@@ -209,11 +209,12 @@ def upcoming_games_seed
     season = current_time.year + 1
   end
   doc = Nokogiri::HTML(open("http://www.hockey-reference.com/leagues/NHL_#{season}_games.html"))
-  # puts 'nokogiri'
+  puts 'nokogiri'
   gamesXML = []
   doc.css('#div_games tbody tr').each do |row|
     gamesXML.push(row.search('a').xpath('text()') + row.search('td').xpath('text()'))
   end
+  puts 'test1'
   # puts each game into a nested array inside gamesArr - data as string
   gamesArr = []
   gamesArr = gamesXML.map do |game|
@@ -221,33 +222,37 @@ def upcoming_games_seed
       x.to_s
     end
   end
+  puts 'test2'
+  p gamesArr
+  p 'next'
 
   # assign data to variables and create game row in table
   # games_today = 0
   # later_games = 0
   gamesArr.each do |game|
-    if (game[2][0..3] == current_time.year.to_s || game[2][0..3] == (current_time.year + 1).to_s)
-      if game[2] == today #&& games_today <= 15
+    p game
+    if (game[0][0..3] == current_time.year.to_s || game[0][0..3] == (current_time.year + 1).to_s)
+      if game[0] == today #&& games_today <= 15
         # games_today += 1
 
-        # puts 'if today'
-        # puts game
-        # p game
+        puts 'if today'
+        puts game
+        p game
 
         # create_future_game(valid_date, home_team, away_team)
-        create_future_game(game[2], game[1], game[0])
-      elsif game[2] >= today # && games_today <= 5 && later_games <= 5
+        create_future_game(game[0], game[2], game[1])
+      elsif game[0] >= today # && games_today <= 5 && later_games <= 5
         # later_games += 1
 
-        # puts 'if tomorrow+'
+        puts 'if tomorrow+'
         # p game
 
         # create_future_game(valid_date, home_team, away_team)
-        create_future_game(game[2], game[1], game[0])
+        create_future_game(game[0], game[2], game[1])
       end #if
     end #if
   end #gamesArr.each
-
+puts 'test3'
   #PLAYOFFS
   gamesXML = []
   doc.css('#div_games_playoffs tbody tr').each do |row|
@@ -260,7 +265,7 @@ def upcoming_games_seed
       x.to_s
     end
   end
-
+puts 'test4'
   # assign data to variables and create game row in table
   # games_today = 0
   # later_games = 0
@@ -269,7 +274,7 @@ def upcoming_games_seed
       if game[2] == today #&& games_today <= 15
         # games_today += 1
 
-        # puts 'if today'
+        puts 'if today'
         # puts game
         # p game
 
@@ -278,7 +283,7 @@ def upcoming_games_seed
       elsif game[2] >= today # && games_today <= 5 && later_games <= 5
         # later_games += 1
 
-        # puts 'if tomorrow+'
+        puts 'if tomorrow+'
         # p game
 
         # create_future_game(valid_date, home_team, away_team)
